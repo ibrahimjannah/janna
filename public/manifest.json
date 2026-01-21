@@ -1,0 +1,22 @@
+{
+    "name": "Indian Royal Dine",
+    "short_name": "Royal Dine",
+    "description": "Authentic Indian Cuisine in London",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#FFF8DC",
+    "theme_color": "#5D4037",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/images/hero.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/images/hero.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
