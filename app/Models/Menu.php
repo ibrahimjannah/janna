@@ -28,4 +28,44 @@ class Menu extends Model
         if (!$user) return false;
         return $this->favorites()->where('user_id', $user->id)->exists();
     }
+
+    /**
+     * Ingredient Management
+     */
+    public function ingredients()
+    {
+        return $this->belongsToMany(Ingredient::class, 'menu_ingredients')
+                    ->withPivot('quantity_required')
+                    ->withTimestamps();
+    }
+
+    public function isAvailable(): bool
+    {
+        // Check if all required ingredients are in stock
+        foreach ($this->ingredients as $ingredient) {
+            if (!$ingredient->is_active) {
+                return false;
+            }
+            if ($ingredient->current_stock < $ingredient->pivot->quantity_required) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function getAvailablePortions(): int
+    {
+        if ($this->ingredients->isEmpty()) {
+            return 999; // No ingredients tracked, assume available
+        }
+
+        $portions = [];
+        foreach ($this->ingredients as $ingredient) {
+            if (!$ingredient->is_active || $ingredient->current_stock <= 0) {
+                return 0;
+            }
+            $portions[] = floor($ingredient->current_stock / $ingredient->pivot->quantity_required);
+        }
+        return min($portions);
+    }
 }
